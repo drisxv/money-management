@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
-Route::get('/', function () {
-    return view('welcome');
+// Semua route di dalam grup ini butuh login dulu
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');

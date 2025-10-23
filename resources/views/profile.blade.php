@@ -14,7 +14,7 @@
         <!-- Header -->
         <header class="bg-white sticky top-0 z-10 shadow-sm">
             <div class="p-4 flex items-center">
-                <a href="index.html" class="p-2 mr-2 rounded-full hover:bg-gray-100">
+                <a href="{{ url()->previous() }}" class="p-2 mr-2 rounded-full hover:bg-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-800">
                         <path d="M19 12H5"></path>
                         <path d="M12 19l-7-7 7-7"></path>
@@ -28,11 +28,11 @@
         <main class="p-4 sm:p-6">
             <!-- Info Pengguna -->
             <div class="flex flex-col items-center text-center py-8">
-                <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden mb-4 ring-4 ring-green-100">
-                    <img src="https://placehold.co/100x100/e2e8f0/334155?text=P" alt="Foto Profil" class="w-full h-full object-cover">
+                <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden mb-4">
+                    <img src="/user.png" alt="Foto Profil" class="w-full h-full object-cover">
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900">Pengguna Setia</h2>
-                <p class="text-sm text-gray-500 mt-1">pengguna.setia@email.com</p>
+                <h2 class="text-2xl font-bold text-gray-900">{{ $user->nama }}</h2>
+                <p class="text-sm text-gray-500 mt-1">{{ $user->email }}</p>
             </div>
 
             <!-- Menu Pengaturan -->
@@ -78,8 +78,8 @@
 
             <!-- Tombol Keluar -->
             <div class="mt-12">
-                <button class="w-full text-left flex items-center p-4 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-4">
+                <button id="logoutBtn" type="button" class="w-full text-left flex items-center p-4 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-4">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -87,9 +87,66 @@
                     <span class="font-semibold">Keluar</span>
                 </button>
             </div>
+
+            <!-- Logout Modal -->
+            <div id="logoutModal"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-white/20 backdrop-blur-sm hidden">
+                <div class="bg-white max-w-sm w-full rounded-lg shadow-xl p-6 mx-4">
+                    <div class="flex flex-col items-center">
+                        <div class="mt-3 text-center">
+                            <h3 class="text-lg font-semibold leading-6 text-gray-900">
+                                Konfirmasi Keluar
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Apakah Anda yakin ingin keluar dari akun ini?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 grid grid-cols-2 gap-3">
+                        <button id="logoutCancel" type="button" class="w-full rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                            Batal
+                        </button>
+                        <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="w-full rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                                Keluar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutBtn = document.getElementById('logoutBtn')
+            const logoutModal = document.getElementById('logoutModal')
+            const logoutCancel = document.getElementById('logoutCancel')
+
+            if (logoutBtn && logoutModal && logoutCancel) {
+                logoutBtn.addEventListener('click', () => {
+                    logoutModal.classList.remove('hidden')
+                })
+                logoutCancel.addEventListener('click', () => {
+                    logoutModal.classList.add('hidden')
+                })
+                logoutModal.addEventListener('click', (e) => {
+                    if (e.target === logoutModal) {
+                        logoutModal.classList.add('hidden')
+                    }
+                })
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && !logoutModal.classList.contains('hidden')) {
+                        logoutModal.classList.add('hidden')
+                    }
+                })
+            }
+        })
+    </script>
 </body>
 
 </html>

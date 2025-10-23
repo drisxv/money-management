@@ -9,3 +9,23 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+a,
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    draggable: false;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

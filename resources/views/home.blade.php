@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-200">
     <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         <div class="lg:flex lg:gap-8">
 
@@ -17,28 +17,67 @@
                 <header class="flex items-center justify-between mb-6">
                     <div>
                         <p class="text-sm text-gray-500">Selamat datang,</p>
-                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Pengguna Setia</h1>
+                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">{{ $user->nama }}</h1>
                     </div>
                     <div class="w-14 h-14 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
                         <a href="{{ route('profile') }}">
-                            <img src="https://placehold.co/100x100/e2e8f0/334155?text=P" alt="Foto Profil" class="w-full h-full object-cover">
+                            <img src="/user.png" alt="Foto Profil" class="w-full h-full object-cover rounded-full">
                         </a>
                     </div>
                 </header>
 
-                <!-- Kartu Saldo -->
-                <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg mb-8 transform hover:scale-105 transition-transform duration-300">
-                    <p class="text-sm font-medium opacity-80">Sisa Uang Anda</p>
-                    <p class="text-4xl lg:text-5xl font-extrabold tracking-tighter mt-1">Rp1.284.500</p>
-                    <div class="mt-4 h-1 bg-white bg-opacity-30 rounded-full"></div>
-                    <p class="text-xs mt-3 opacity-80">Harap Berhati - hati</p>
+                <div class="bg-white rounded-2xl shadow-lg p-5">
+                    <h2 class="text-lg font-semibold text-gray-900">Cash Flow</h2>
+                    <p class="text-gray-500 text-sm mt-1">Bulan Ini</p>
+
+                    <div class="text-3xl font-bold mt-2 text-gray-900">
+                        Rp{{ number_format($totalCashFlow ?? 0, 0, ',', '.') }}
+                    </div>
+
+                    <!-- Pemasukan -->
+                    <div class="flex justify-between text-sm mb-1 text-gray-800">
+                        <span>Pemasukan</span>
+                        <span>Rp{{ number_format($uangMasuk ?? 0, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3 mb-3 overflow-hidden">
+                        <div
+                            class="bg-emerald-500 h-3 rounded-full transition-all duration-700"
+                            style="width: {{ $persenMasuk ?? 0 }}%">
+                        </div>
+                    </div>
+
+                    <!-- Pengeluaran -->
+                    <div class="flex justify-between text-sm mb-1 text-gray-800">
+                        <span>Pengeluaran</span>
+                        <span>Rp{{ number_format($uangKeluar ?? 0, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3 mb-3 overflow-hidden">
+                        <div
+                            class="bg-red-500 h-3 rounded-full transition-all duration-700"
+                            style="width: {{ $persenKeluar ?? 0 }}%">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-3 text-xs mt-3 text-gray-600">
+                        <span class="flex items-center gap-1">
+                            <span class="w-3 h-3 bg-emerald-500 inline-block rounded-sm"></span>
+                            Pemasukan
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <span class="w-3 h-3 bg-red-500 inline-block rounded-sm"></span>
+                            Pengeluaran
+                        </span>
+                    </div>
                 </div>
+
+
+
 
                 <!-- Menu Layanan -->
                 <div class="mt-8 bg-white rounded-2xl p-6 shadow-sm">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Atur Keuangan</h2>
                     <!-- Menu Layanan Terpadu -->
-                    <div class="grid grid-cols-4 gap-4 text-center">
+                    <div class="grid grid-cols-3 gap-4 text-center">
                         <!-- Tombol Pengeluaran -->
                         <a href="#" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
                             <!-- ICON BARU: Pengeluaran -->
