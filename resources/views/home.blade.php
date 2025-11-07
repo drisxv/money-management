@@ -76,11 +76,9 @@
                 <!-- Menu Layanan -->
                 <div class="mt-8 bg-white rounded-2xl p-6 shadow-sm">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Atur Keuangan</h2>
-                    <!-- Menu Layanan Terpadu -->
+                    <!-- Menu Layanan -->
                     <div class="grid grid-cols-3 gap-4 text-center">
-                        <!-- Tombol Pengeluaran -->
                         <a href="#" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
-                            <!-- ICON BARU: Pengeluaran -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-green-600">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="m16 12-4-4-4 4"></path>
@@ -88,9 +86,7 @@
                             </svg>
                             <span class="text-xs font-semibold text-gray-800">Pengeluaran</span>
                         </a>
-                        <!-- Tombol Pemasukan -->
                         <a href="#" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
-                            <!-- ICON BARU: Pemasukan -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-green-600">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="m8 12 4 4 4-4"></path>
@@ -98,8 +94,7 @@
                             </svg>
                             <span class="text-xs font-semibold text-gray-800">Pemasukan</span>
                         </a>
-                        <!-- Tombol Riwayat -->
-                        <a href="#" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
+                        <a href="{{ route('riwayat') }}" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-green-600">
                                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                                 <path d="M3 3v5h5" />

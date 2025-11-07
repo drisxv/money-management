@@ -16,19 +16,17 @@ class HomeController extends Controller
         $uangMasukList = UangMasuk::where('user_id', $user->id)->latest()->get();
         $uangKeluarList = UangKeluar::where('user_id', $user->id)->latest()->get();
 
-        // $totalMasuk = $uangMasukList->sum(fn($item) => $item->nominal ?? $item->amount ?? 0);
-        // $totalKeluar = $uangKeluarList->sum(fn($item) => $item->nominal ?? $item->amount ?? 0);
-        $totalMasuk = 500000;
-        $totalKeluar = 300000;
+        $totalMasuk = $uangMasukList->sum(fn($item) => $item->nominal ?? $item->amount ?? 0);
+        $totalKeluar = $uangKeluarList->sum(fn($item) => $item->nominal ?? $item->amount ?? 0);
 
         $totalCashFlow = $totalMasuk - $totalKeluar;
 
-        // Cegah pembagian nol
-        $maxValue = max($totalMasuk, $totalKeluar, 1);
-
-        // Hitung proporsi
-        if ($totalMasuk == $totalKeluar && $totalMasuk > 0) {
-            // Kalau sama, dua-duanya full
+        // Jika kedua total nol, kedua persentase nol — cegah pembagian nol
+        if ($totalMasuk == 0 && $totalKeluar == 0) {
+            $persenMasuk = 0;
+            $persenKeluar = 0;
+        } elseif ($totalMasuk == $totalKeluar) {
+            // Sama dan pasti > 0 karena kasus nol ditangani
             $persenMasuk = 100;
             $persenKeluar = 100;
         } elseif ($totalMasuk > $totalKeluar) {

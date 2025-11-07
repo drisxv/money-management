@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Saya - Manajemen Keuangan</title>
+    <title>Riwayat - Manajemen Keuangan</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -58,30 +58,6 @@
                         </svg>
                     </a>
                 </div>
-
-                <div class="mt-8 space-y-2">
-                    <h3 class="px-4 text-sm font-semibold text-gray-500 mb-2">PENGATURAN APLIKASI</h3>
-                    <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 13h2v5H7zm4-3h2v8h-2zm4-4h2v12h-2z" />
-                        </svg>
-                        <span class="font-semibold text-gray-800 flex-grow">Keuangan</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
-                        </svg>
-                    </a>
-                    <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 12V7a2 2 0 0 0-2-2h-5l-9 9a2 2 0 0 0 0 2.83l5.17 5.17a2 2 0 0 0 2.83 0l9-9z" />
-                            <circle cx="16" cy="8" r="1" />
-                        </svg>
-                        <span class="font-semibold text-gray-800 flex-grow">Kategori</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
-                        </svg>
-                    </a>
-                </div>
-
 
                 <div class="mt-8 space-y-2">
                     <h3 class="px-4 text-sm font-semibold text-gray-500 mb-2">BANTUAN</h3>
