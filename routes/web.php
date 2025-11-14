@@ -13,4 +13,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
+
+    Route::get('/tambah-pengeluaran', function () {
+        return view('tambah-pengeluaran');
+    })->name('tambah-pengeluaran');
 });
