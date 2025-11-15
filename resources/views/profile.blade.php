@@ -70,7 +70,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
                         </svg>
                     </a>
-                    <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                    <a href="{{ route('kategori') }}" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20 12V7a2 2 0 0 0-2-2h-5l-9 9a2 2 0 0 0 0 2.83l5.17 5.17a2 2 0 0 0 2.83 0l9-9z" />
                             <circle cx="16" cy="8" r="1" />

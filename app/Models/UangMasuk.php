@@ -7,7 +7,7 @@ use App\Models\User;
 
 class UangMasuk extends Model
 {
-    protected $table = 'uang_masuk';
+    protected $table = 'uang_masuks';
 
     protected $fillable = ['user_id', 'sumber', 'jumlah', 'tanggal', 'catatan'];
 

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\UangMasuk;
 use App\Models\UangKeluar;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class UangService
 {
@@ -51,5 +52,24 @@ class UangService
             'persenMasuk' => $persenMasuk,
             'persenKeluar' => $persenKeluar,
         ];
+    }
+
+    public function storeUangMasuk(int $userId, array $data): UangMasuk
+    {
+        $nominal = isset($data['nominal']) ? (float) $data['nominal'] : (isset($data['amount']) ? (float) $data['amount'] : 0);
+
+        if ($nominal <= 0) {
+            throw new \InvalidArgumentException('Nominal harus lebih besar dari 0.');
+        }
+
+        $payload = [
+            'user_id' => $userId,
+            'nominal' => $nominal,
+            'keterangan' => $data['keterangan'] ?? null,
+        ];
+
+        return DB::transaction(function () use ($payload) {
+            return UangMasuk::create($payload);
+        });
     }
 }

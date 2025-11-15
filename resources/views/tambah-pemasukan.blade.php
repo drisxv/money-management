@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Pengeluaran - Manajemen Keuangan</title>
+    <title>Tambah Pemasukan - Manajemen Keuangan</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -20,7 +20,7 @@
                         <path d="M12 19l-7-7 7-7"></path>
                     </svg>
                 </a>
-                <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Tambah Pengeluaran</h1>
+                <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Tambah Pemasukan</h1>
             </div>
         </header>
 
@@ -45,20 +45,6 @@
                             placeholder="0"
                             class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 pl-12 pr-4 text-gray-900 text-lg font-semibold focus:border-green-500 focus:ring-green-500">
                     </div>
-                </div>
-
-                <div>
-                    <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                    <select id="kategori" name="kategori" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500">
-                        <option value="">Pilih kategori</option>
-                        <option value="makanan">Makanan & Minuman</option>
-                        <option value="transportasi">Transportasi</option>
-                        <option value="tagihan">Tagihan</option>
-                        <option value="belanja">Belanja</option>
-                        <option value="hiburan">Hiburan</option>
-                        <option value="kesehatan">Kesehatan</option>
-                        <option value="lainnya">Lainnya</option>
-                    </select>
                 </div>
 
                 <div>

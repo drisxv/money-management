@@ -13,7 +13,6 @@
         <div class="lg:flex lg:gap-8">
 
             <div class="lg:w-2/3">
-                <!-- Header -->
                 <header class="flex items-center justify-between mb-6">
                     <div>
                         <p class="text-sm text-gray-500">Selamat datang,</p>
@@ -34,7 +33,6 @@
                         Rp{{ number_format($totalCashFlow ?? 0, 0, ',', '.') }}
                     </div>
 
-                    <!-- Pemasukan -->
                     <div class="flex justify-between text-sm mb-1 text-gray-800">
                         <span>Pemasukan</span>
                         <span>Rp{{ number_format($uangMasuk ?? 0, 0, ',', '.') }}</span>
@@ -46,7 +44,6 @@
                         </div>
                     </div>
 
-                    <!-- Pengeluaran -->
                     <div class="flex justify-between text-sm mb-1 text-gray-800">
                         <span>Pengeluaran</span>
                         <span>Rp{{ number_format($uangKeluar ?? 0, 0, ',', '.') }}</span>
@@ -70,15 +67,65 @@
                     </div>
                 </div>
 
+                <div class="mt-8 bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="text-lg font-bold text-gray-900 mb-4">Alokasi Dana</h2>
+                    <p class="text-gray-500 text-sm -mt-2 mb-5">Berdasarkan sisa cash flow bulan ini</p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-blue-600">
+                                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </div>
+                            <div class="flex-grow">
+                                <p class="font-semibold text-gray-800">Living</p>
+                                <p class="text-xs text-gray-500">Alokasi 50%</p>
+                            </div>
+                            <p class="font-bold text-blue-600 text-right ml-2">Rp{{ number_format(($totalCashFlow ?? 0) * 0.50, 0, ',', '.') }}</p>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-purple-600">
+                                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" x2="21" y1="6" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-grow">
+                                <p class="font-semibold text-gray-800">Playing</p>
+                                <p class="text-xs text-gray-500">Alokasi 30%</p>
+                            </div>
+                            <p class="font-bold text-purple-600 text-right ml-2">Rp{{ number_format(($totalCashFlow ?? 0) * 0.30, 0, ',', '.') }}</p>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-green-600">
+                                    <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                    <path d="M6 12h.01M18 12h.01"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-grow">
+                                <p class="font-semibold text-gray-800">Saving</p>
+                                <p class="text-xs text-gray-500">Alokasi 20%</p>
+                            </div>
+                            <p class="font-bold text-green-600 text-right ml-2">Rp{{ number_format(($totalCashFlow ?? 0) * 0.20, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+                </div>
 
 
+            </div>
 
-                <!-- Menu Layanan -->
-                <div class="mt-8 bg-white rounded-2xl p-6 shadow-sm">
+            <div class="lg:w-1/3 mt-8 lg:mt-0">
+                <div class="mb-8 bg-white rounded-2xl p-6 shadow-sm">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">Atur Keuangan</h2>
-                    <!-- Menu Layanan -->
                     <div class="grid grid-cols-3 gap-4 text-center">
-                        <a href="#" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
+                        <a href="{{ route('tambah-pengeluaran') }}" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-green-600">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="m16 12-4-4-4 4"></path>
@@ -86,7 +133,7 @@
                             </svg>
                             <span class="text-xs font-semibold text-gray-800">Pengeluaran</span>
                         </a>
-                        <a href="#" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
+                        <a href="{{ route('tambah-pemasukan') }}" class="flex flex-col items-center space-y-2 hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 text-green-600">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="m8 12 4 4 4-4"></path>
@@ -104,17 +151,12 @@
                         </a>
                     </div>
                 </div>
-            </div>
-
-            <!-- Kolom Kanan: Pengeluaran Terbaru -->
-            <div class="lg:w-1/3 mt-8 lg:mt-0">
                 <div class="bg-white p-6 rounded-2xl shadow-sm sticky top-8">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-lg font-bold text-gray-900">Pengeluaran Terbaru</h2>
                         <a href="#" class="text-sm font-semibold text-green-600 hover:underline">Lihat Semua</a>
                     </div>
                     <div class="space-y-3">
-                        <!-- Item Transaksi 1: Pengeluaran -->
                         <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
@@ -130,7 +172,6 @@
                             <p class="font-bold text-red-600 text-right ml-2">-Rp25.000</p>
                         </div>
 
-                        <!-- Item Transaksi 2: Pengeluaran -->
                         <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
@@ -146,7 +187,6 @@
                             <p class="font-bold text-red-600 text-right ml-2">-Rp152.000</p>
                         </div>
 
-                        <!-- Item Transaksi 3: Pengeluaran -->
                         <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
@@ -162,7 +202,6 @@
                             <p class="font-bold text-red-600 text-right ml-2">-Rp35.000</p>
                         </div>
 
-                        <!-- Item Transaksi 4: Pengeluaran -->
                         <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">

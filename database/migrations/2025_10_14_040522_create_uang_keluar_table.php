@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('uang_keluar', function (Blueprint $table) {
+        Schema::create('uang_keluars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->enum('kategori', ['living', 'saving', 'playing'])->default('living');
+            $table->foreignId('sub_kategori_id')->constrained('kategoris')->onDelete('cascade');
             $table->string('deskripsi');
             $table->decimal('jumlah', 15, 2);
             $table->date('tanggal')->default(now());
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('uang_keluar');
+        Schema::dropIfExists('uang_keluars');
     }
 };

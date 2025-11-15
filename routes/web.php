@@ -17,4 +17,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tambah-pengeluaran', function () {
         return view('tambah-pengeluaran');
     })->name('tambah-pengeluaran');
+    Route::get('/tambah-pemasukan', function () {
+        return view('tambah-pemasukan');
+    })->name('tambah-pemasukan');
+    Route::get('/kategori', function () {
+        return view('kategori');
+    })->name('kategori');
 });

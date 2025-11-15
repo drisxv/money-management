@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('email')->unique();
-            $table->string('password')->nullable();
+            $table->string('password');
             $table->string('google_id')->nullable();
+            $table->tinyInteger('tanggal_gajian')->default(1);
+            $table->timestamp('email_terverifikasi')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
