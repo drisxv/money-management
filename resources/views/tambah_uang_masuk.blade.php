@@ -26,12 +26,12 @@
 
         <main class="p-4 sm:p-6 lg:p-8">
 
-            <form action="#" method="POST" class="space-y-6">
+            <form action="{{ route('tambah-pemasukan.store') }}" method="POST" class="space-y-6" id="form-tambah-uang-masuk">
                 @csrf
 
                 <div>
-                    <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                    <input id="nama" name="nama" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500" placeholder="Nama">
+                    <label for="sumber" class="block text-sm font-medium text-gray-700 mb-1">Sumber</label>
+                    <input id="sumber" name="sumber" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500" placeholder="Contoh: Gaji, Penjualan, dsb.">
                 </div>
 
                 <div>
@@ -43,8 +43,14 @@
                             id="jumlah"
                             name="jumlah"
                             placeholder="0"
+                            inputmode="numeric"
                             class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 pl-12 pr-4 text-gray-900 text-lg font-semibold focus:border-green-500 focus:ring-green-500">
                     </div>
+                </div>
+
+                <div>
+                    <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                    <input id="tanggal" name="tanggal" type="date" value="{{ date('Y-m-d') }}" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500">
                 </div>
 
                 <div>
@@ -63,21 +69,41 @@
         </main>
     </div>
 
-    <!-- Script format angka -->
+    <!-- Script format angka + normalisasi sebelum submit -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const input = document.getElementById("jumlah");
+            const form = document.getElementById("form-tambah-uang-masuk");
 
+            // Format angka hanya dengan titik (tanpa koma, tanpa desimal)
             input.addEventListener("input", function() {
-                let value = this.value.replace(/[^0-9]/g, "");
-                if (value) {
-                    this.value = new Intl.NumberFormat("id-ID").format(value);
-                } else {
+                // Ambil angka saja
+                let raw = this.value.replace(/\D/g, "");
+
+                // Jika kosong
+                if (!raw) {
                     this.value = "";
+                    return;
                 }
+
+                // Hapus leading zero (kecuali jika hanya nol)
+                raw = raw.replace(/^0+(?=\d)/, "");
+
+                // Format ribuan (id-ID memakai titik)
+                this.value = new Intl.NumberFormat("id-ID", {
+                    maximumFractionDigits: 0
+                }).format(raw);
+            });
+
+            // Normalisasi sebelum submit → hapus semua titik
+            form.addEventListener("submit", function() {
+                let v = input.value || "";
+                v = v.replace(/\./g, ""); // hapus semua titik
+                input.value = v; // backend terima angka bersih
             });
         });
     </script>
+
 
 </body>
 
