@@ -23,11 +23,6 @@ class UserService
     {
         return User::find($id);
     }
-
-    /**
-     * $data expects at least: ['email' => ..., 'password' => ...]
-     * Other fields (nama, ...) will be set if present.
-     */
     public function create(array $data): User
     {
         $user = new User();
@@ -41,13 +36,10 @@ class UserService
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
-
-        // set any other fillable fields present in $data
         foreach ($data as $key => $value) {
             if (in_array($key, ['nama', 'email', 'password'])) {
                 continue;
             }
-            // only assign if the attribute exists on model (basic protection)
             if (array_key_exists($key, $user->getAttributes()) || in_array($key, $user->getFillable())) {
                 $user->{$key} = $value;
             }
@@ -85,10 +77,6 @@ class UserService
 
         return $user;
     }
-
-    /**
-     * Accepts User instance or user id.
-     */
     public function delete(User|int $user): bool
     {
         if (! $user instanceof User) {
@@ -100,4 +88,20 @@ class UserService
 
         return (bool) $user->delete();
     }
+
+    public function updatePassword(User|int $user, string $newPassword): ?User
+{
+    if (! $user instanceof User) {
+        $user = $this->find($user);
+        if (! $user) {
+            return null;
+        }
+    }
+
+    $user->password = Hash::make($newPassword);
+    $user->save();
+
+    return $user;
+}
+
 }

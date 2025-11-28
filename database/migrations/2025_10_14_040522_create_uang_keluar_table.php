@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('uang_keluars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('sub_kategori_id')->constrained('kategoris')->onDelete('cascade');
+            $table->foreignId('sub_kategori_id')->constrained('sub_kategoris')->onDelete('cascade');
             $table->string('deskripsi');
             $table->decimal('jumlah', 15, 2);
             $table->date('tanggal')->default(now());

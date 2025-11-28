@@ -49,11 +49,6 @@
                 </div>
 
                 <div>
-                    <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                    <input id="tanggal" name="tanggal" type="date" value="{{ date('Y-m-d') }}" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500">
-                </div>
-
-                <div>
                     <label for="catatan" class="block text-sm font-medium text-gray-700 mb-1">Catatan (Opsional)</label>
                     <textarea id="catatan" name="catatan" rows="3" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500" placeholder="Contoh: Makan siang di warung..."></textarea>
                 </div>
@@ -69,37 +64,29 @@
         </main>
     </div>
 
-    <!-- Script format angka + normalisasi sebelum submit -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const input = document.getElementById("jumlah");
             const form = document.getElementById("form-tambah-uang-masuk");
 
-            // Format angka hanya dengan titik (tanpa koma, tanpa desimal)
             input.addEventListener("input", function() {
-                // Ambil angka saja
                 let raw = this.value.replace(/\D/g, "");
-
-                // Jika kosong
                 if (!raw) {
                     this.value = "";
                     return;
                 }
 
-                // Hapus leading zero (kecuali jika hanya nol)
                 raw = raw.replace(/^0+(?=\d)/, "");
 
-                // Format ribuan (id-ID memakai titik)
                 this.value = new Intl.NumberFormat("id-ID", {
                     maximumFractionDigits: 0
                 }).format(raw);
             });
 
-            // Normalisasi sebelum submit → hapus semua titik
             form.addEventListener("submit", function() {
                 let v = input.value || "";
-                v = v.replace(/\./g, ""); // hapus semua titik
-                input.value = v; // backend terima angka bersih
+                v = v.replace(/\./g, "");
+                input.value = v;
             });
         });
     </script>

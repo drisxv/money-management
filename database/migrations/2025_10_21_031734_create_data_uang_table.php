@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_uang', function (Blueprint $table) {
+        Schema::create('data_uangs', function (Blueprint $table) {
             $table->id();
-            $table->string('periode');
-            $table->integer('total_uang');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
+            $table->integer('jumlah');
+            $table->string('bulan'); // Format: YYYY-MM
             $table->timestamps();
         });
     }

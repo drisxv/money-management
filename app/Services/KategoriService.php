@@ -3,135 +3,113 @@
 namespace App\Services;
 
 use App\Models\Kategori;
-use App\Models\SubKategori;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class KategoriService
 {
-    public function all(): Collection
+    /**
+     * Mengambil semua data kategori.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function all()
     {
-        return Kategori::orderBy('nama')->get();
+        // Menambahkan log saat mengambil semua data kategori
+        Log::info('Mengambil semua data kategori.');
+
+        return Kategori::orderBy('id')->get();
     }
 
-    public function paginate(int $perPage = 15)
-    {
-        return Kategori::orderBy('nama')->paginate($perPage);
-    }
-
-    public function find(int $id): Kategori
-    {
-        return Kategori::findOrFail($id);
-    }
-
-    public function create(array $data): Kategori
-    {
-        $nama = trim($data['nama'] ?? '');
-        $presentase = isset($data['presentase']) ? (float)$data['presentase'] : null;
-        $subKategoris = $data['sub_kategoris'] ?? null; // array of names
-
-        if ($nama === '') {
-            throw new \InvalidArgumentException('Nama kategori diperlukan.');
-        }
-
-        return DB::transaction(function () use ($nama, $presentase, $subKategoris) {
-            $kategori = Kategori::create([
-                'nama' => $nama,
-                'presentase' => $presentase,
-            ]);
-
-            if (is_array($subKategoris) && count($subKategoris) > 0) {
-                $rows = [];
-                foreach ($subKategoris as $s) {
-                    $sNama = trim((string)$s);
-                    if ($sNama === '') {
-                        continue;
-                    }
-                    $rows[] = [
-                        'kategori_id' => $kategori->id,
-                        'nama' => $sNama,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
-                }
-                if (!empty($rows)) {
-                    SubKategori::insert($rows);
-                }
-            }
-
-            return $kategori->fresh();
-        });
-    }
-
+    /**
+     * Update persentase kategori berdasarkan id.
+     *
+     * @param int $id
+     * @param array $data
+     * @return Kategori
+     * @throws ModelNotFoundException
+     */
     public function update(int $id, array $data): Kategori
     {
-        $kategori = Kategori::findOrFail($id);
-
-        $nama = isset($data['nama']) ? trim($data['nama']) : $kategori->nama;
-        $presentase = array_key_exists('presentase', $data) ? (float)$data['presentase'] : $kategori->presentase;
-        $subKategoris = $data['sub_kategoris'] ?? null; // optional replace list of names
-
-        return DB::transaction(function () use ($kategori, $nama, $presentase, $subKategoris) {
-            $kategori->update([
-                'nama' => $nama,
-                'presentase' => $presentase,
-            ]);
-
-            if (is_array($subKategoris)) {
-                // replace existing subkategori set
-                SubKategori::where('kategori_id', $kategori->id)->delete();
-
-                $rows = [];
-                foreach ($subKategoris as $s) {
-                    $sNama = trim((string)$s);
-                    if ($sNama === '') {
-                        continue;
-                    }
-                    $rows[] = [
-                        'kategori_id' => $kategori->id,
-                        'nama' => $sNama,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
-                }
-                if (!empty($rows)) {
-                    SubKategori::insert($rows);
-                }
-            }
-
-            return $kategori->fresh();
-        });
-    }
-
-    public function delete(int $id): bool
-    {
-        $kategori = Kategori::findOrFail($id);
-
-        return DB::transaction(function () use ($kategori) {
-            SubKategori::where('kategori_id', $kategori->id)->delete();
-            return (bool) $kategori->delete();
-        });
-    }
-
-    public function addSubKategori(int $kategoriId, string $nama): SubKategori
-    {
-        $kategori = Kategori::findOrFail($kategoriId);
-
-        $namaTrim = trim($nama);
-        if ($namaTrim === '') {
-            throw new \InvalidArgumentException('Nama subkategori diperlukan.');
+        // Validasi: apakah data yang diperlukan ada dan dapat dikonversi menjadi integer
+        if (!isset($data['persentase']) || !is_numeric($data['persentase'])) {
+            Log::error('Persentase invalid', ['id' => $id, 'data' => $data]);
+            throw new \InvalidArgumentException('Persentase harus diberikan dalam format numerik.');
         }
 
-        return SubKategori::create([
-            'kategori_id' => $kategori->id,
-            'nama' => $namaTrim,
-        ]);
+        // Cast ke integer (terima nilai numerik sebagai string juga)
+        $persentase = (int) $data['persentase'];
+
+        // Validasi rentang persentase (opsional, 0-100)
+        if ($persentase < 0 || $persentase > 100) {
+            Log::error('Persentase di luar rentang', ['id' => $id, 'persentase' => $persentase]);
+            throw new \InvalidArgumentException('Persentase harus berada di antara 0 dan 100.');
+        }
+
+        // Cari kategori berdasarkan ID
+        $kategori = Kategori::find($id);
+
+        // Jika kategori tidak ditemukan, lemparkan exception
+        if (!$kategori) {
+            Log::warning("Kategori dengan ID {$id} tidak ditemukan.");
+            throw new ModelNotFoundException("Kategori dengan ID {$id} tidak ditemukan.");
+        }
+
+        return DB::transaction(function () use ($kategori, $data, $id, $persentase) {
+            Log::info('Memperbarui persentase kategori.', ['id' => $id, 'persentase' => $data['persentase']]);
+
+            $kategori->update([
+                'persentase' => $persentase
+            ]);
+
+            Log::info('Persentase kategori berhasil diperbarui.', ['id' => $id, 'new_persentase' => $persentase]);
+
+            return $kategori->fresh(); 
+        });
     }
 
-    public function removeSubKategori(int $subKategoriId): bool
+    public function updateMultiple(array $persentases)
     {
-        $sub = SubKategori::findOrFail($subKategoriId);
-        return (bool) $sub->delete();
+        $ids = [1, 2, 3];
+
+        $total = 0;
+        foreach ($ids as $id) {
+            if (!isset($persentases[$id]) && !isset($persentases[(string)$id])) {
+                Log::error('Persentase untuk id tidak tersedia', ['missing_id' => $id, 'input' => $persentases]);
+                throw new \InvalidArgumentException("Persentase untuk id {$id} harus diberikan.");
+            }
+
+            $val = isset($persentases[$id]) ? $persentases[$id] : $persentases[(string)$id];
+
+            if (!is_numeric($val)) {
+                Log::error('Persentase invalid (batch)', ['id' => $id, 'value' => $val]);
+                throw new \InvalidArgumentException('Semua persentase harus berupa angka.');
+            }
+
+            $persentases[$id] = (int) $val;
+            $total += $persentases[$id];
+        }
+
+        if ($total !== 100) {
+            Log::error('Total persentase batch tidak 100', ['total' => $total, 'data' => $persentases]);
+            throw new \InvalidArgumentException('Total persentase harus bernilai 100%.');
+        }
+
+        return DB::transaction(function () use ($persentases, $ids) {
+            $updated = [];
+            foreach ($ids as $id) {
+                $kategori = Kategori::find($id);
+                if (!$kategori) {
+                    Log::warning("Kategori id {$id} tidak ditemukan saat batch update.");
+                    throw new ModelNotFoundException("Kategori dengan ID {$id} tidak ditemukan.");
+                }
+
+                $kategori->update(['persentase' => $persentases[$id]]);
+                $updated[] = $kategori->fresh();
+            }
+
+            return collect($updated);
+        });
     }
 }

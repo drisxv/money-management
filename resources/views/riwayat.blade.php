@@ -1,104 +1,139 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
+@section('content')
+<div class="mx-auto sm:p-6 lg:p-8">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat - Manajemen Keuangan</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="bg-gray-100">
-
-    <div class="max-w-lg mx-auto bg-white min-h-screen lg:min-h-0 lg:max-w-5xl lg:mt-12 lg:rounded-xl lg:shadow-xl lg:overflow-hidden">
-
-        <header class="bg-white sticky top-0 z-10 shadow-sm lg:shadow-none lg:border-b lg:border-gray-200">
-            <div class="p-4 lg:p-6 flex items-center">
-                <a href="{{ url()->previous() }}" class="p-2 mr-2 rounded-full hover:bg-gray-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-800">
-                        <path d="M19 12H5"></path>
-                        <path d="M12 19l-7-7 7-7"></path>
-                    </svg>
+    <header class="bg-white sticky top-0 z-10 shadow-sm lg:shadow-none lg:border-b mb-4 lg:border-gray-200">
+        <div class="p-4 lg:p-6 flex items-center">
+            <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Riwayat</h1>
+        </div>
+    </header>
+    <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">Filter</h2>
+        <form method="get" class="space-y-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="start_date" class="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
+                    <input type="date" id="start_date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors" />
+                </div>
+                <div>
+                    <label for="end_date" class="block text-sm font-medium text-gray-700">Tanggal Berakhir</label>
+                    <input type="date" id="end_date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors" />
+                </div>
+                <div>
+                    <label for="tipe" class="block text-sm font-medium text-gray-700">Tipe Transaksi</label>
+                    <select id="tipe" name="tipe" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors">
+                        <option value="">Semua</option>
+                        <option value="masuk" {{ (isset($filters['tipe']) && $filters['tipe']=='masuk')? 'selected':'' }}>Pemasukan</option>
+                        <option value="keluar" {{ (isset($filters['tipe']) && $filters['tipe']=='keluar')? 'selected':'' }}>Pengeluaran</option>
+                        <option value="data" {{ (isset($filters['tipe']) && $filters['tipe']=='data')? 'selected':'' }}>Data (Alokasi)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="kategori_id" class="block text-sm font-medium text-gray-700">Kategori</label>
+                    <select id="kategori_id" name="kategori_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors">
+                        <option value="">Semua</option>
+                        @foreach($kategoris as $kat)
+                        <option value="{{ $kat->id }}" {{ (isset($filters['kategori_id']) && $filters['kategori_id']==$kat->id)? 'selected':'' }}>{{ ucfirst($kat->nama) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="pt-3 flex gap-3">
+                <button type="submit" class="px-5 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold transition-colors duration-200 shadow-md">
+                    Terapkan Filter
+                </button>
+                <a href="{{ route('riwayat') }}" class="px-5 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition-colors duration-200">
+                    Reset
                 </a>
-                <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Riwayat</h1>
             </div>
-        </header>
-
-        <main class="p-4 sm:p-6 lg:p-8">
-            <div class="space-y-6">
-
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-500 mb-3 px-1">Hari Ini - 11 November 2025</h3>
-                    <div class="space-y-2">
-
-                        <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                            <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="19" x2="12" y2="5"></line>
-                                    <polyline points="5 12 12 5 19 12"></polyline>
-                                </svg>
-                            </div>
-                            <div class="flex-grow">
-                                <span class="font-semibold text-gray-800">Gaji Bulanan</span>
-                                <span class="block text-sm text-gray-500">09:00 WIB - Transfer Bank</span>
-                            </div>
-                            <span class="font-semibold text-green-600">+ Rp 5.000.000</span>
-                        </a>
-
-                        <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <polyline points="19 12 12 19 5 12"></polyline>
-                                </svg>
-                            </div>
-                            <div class="flex-grow">
-                                <span class="font-semibold text-gray-800">Makan Siang</span>
-                                <span class="block text-sm text-gray-500">12:30 WIB - Tunai</span>
-                            </div>
-                            <span class="font-semibold text-red-600">- Rp 25.000</span>
-                        </a>
-
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-500 mb-3 px-1">Kemarin - 10 November 2025</h3>
-                    <div class="space-y-2">
-
-                        <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <polyline points="19 12 12 19 5 12"></polyline>
-                                </svg>
-                            </div>
-                            <div class="flex-grow">
-                                <span class="font-semibold text-gray-800">Makan Siang</span>
-                                <span class="block text-sm text-gray-500">12:30 WIB - Tunai</span>
-                            </div>
-                            <span class="font-semibold text-red-600">- Rp 25.000</span>
-                        </a>
-
-                        <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <polyline points="19 12 12 19 5 12"></polyline>
-                                </svg>
-                            </div>
-                            <div class="flex-grow">
-                                <span class="font-semibold text-gray-800">Makan Siang</span>
-                                <span class="block text-sm text-gray-500">12:30 WIB - Tunai</span>
-                            </div>
-                            <span class="font-semibold text-red-600">- Rp 25.000</span>
-                        </a>
-
-                    </div>
-                </div>
-            </div>
-        </main>
+        </form>
     </div>
 
-</body>
 
-</html>
+    <div class="space-y-4">
+        @php
+        $groups = collect($riwayat->items())->groupBy(function($item) {
+        return \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d');
+        });
+        @endphp
+
+        @if($groups->isEmpty())
+        <div class="p-6 bg-white rounded-2xl shadow-sm border border-gray-200 text-center text-gray-500">
+            <p>Tidak ada riwayat yang cocok dengan kriteria filter.</p>
+            <a href="{{ route('riwayat') }}" class="mt-2 inline-block text-green-600 hover:text-green-700 font-semibold">Reset Filter</a>
+        </div>
+        @else
+        @foreach($groups as $day => $items)
+        <div>
+            <div class="mb-3 text-sm font-semibold text-gray-700">{{ \Carbon\Carbon::parse($day)->translatedFormat('l, d M Y') }}</div>
+
+            <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
+                @foreach($items as $item)
+                @php
+                $colorClass = match($item->type) {
+                'masuk' => 'text-green-600',
+                'keluar' => 'text-red-600',
+                default => 'text-indigo-600',
+                };
+                $amountClass = match($item->type) {
+                'masuk' => 'text-green-600',
+                'keluar' => 'text-red-600',
+                default => 'text-gray-800',
+                };
+                $sign = match($item->type) {
+                'masuk' => '+',
+                'keluar' => '-',
+                default => '',
+                };
+                @endphp
+
+                <a href="{{ route('riwayat.detail', ['type' => $item->type, 'id' => $item->entry_id]) }}" class="flex items-center p-4 rounded-lg bg-transparent border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+                    <div class="w-10 h-10 rounded-full text-white flex items-center justify-center mr-4 flex-shrink-0">
+                        @if($item->type == 'masuk')
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="m8 12 4 4 4-4"></path>
+                            <path d="M12 8v8"></path>
+                        </svg>
+                        @elseif($item->type == 'keluar')
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="m16 12-4-4-4 4"></path>
+                            <path d="M12 16V8"></path>
+                        </svg>
+                        @else
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                        </svg>
+                        @endif
+                    </div>
+
+                    <div class="flex-grow min-w-0">
+                        <p class="font-semibold text-gray-900 truncate">{{ $item->description }}</p>
+                        <p class="text-xs text-gray-600 mt-0.5">
+                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                            @if(isset($item->sub_kategori_nama) && $item->sub_kategori_nama)
+                            <span class="font-medium text-gray-500"> - {{ ucfirst($item->sub_kategori_nama) }}</span>
+                            @endif
+                        </p>
+                    </div>
+
+                    <p class="font-bold {{ $amountClass }} text-right ml-4 flex-shrink-0">
+                        {{ $sign }} Rp {{ number_format($item->amount, 0, ',', '.') }}
+                    </p>
+                </a>
+                @endforeach
+            </div>
+        </div>
+        @endforeach
+        @endif
+    </div>
+
+    <div class="pt-6">
+        {{ $riwayat->withQueryString()->links('pagination::tailwind') }}
+    </div>
+
+</div>
+@endsection

@@ -26,12 +26,13 @@
 
         <main class="p-4 sm:p-6 lg:p-8">
 
-            <form action="#" method="POST" class="space-y-6">
+            <form action="{{ route('uang-keluar.store') }}" method="POST" class="space-y-6">
                 @csrf
+                <input type="hidden" name="force" id="force-input" value="0">
 
                 <div>
-                    <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                    <input id="nama" name="nama" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500" placeholder="Nama">
+                    <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                    <input id="deskripsi" name="deskripsi" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500" placeholder="Contoh: Makan siang">
                 </div>
 
                 <div>
@@ -48,16 +49,15 @@
                 </div>
 
                 <div>
-                    <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                    <select id="kategori" name="kategori" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500">
-                        <option value="">Pilih kategori</option>
-                        <option value="makanan">Makanan & Minuman</option>
-                        <option value="transportasi">Transportasi</option>
-                        <option value="tagihan">Tagihan</option>
-                        <option value="belanja">Belanja</option>
-                        <option value="hiburan">Hiburan</option>
-                        <option value="kesehatan">Kesehatan</option>
-                        <option value="lainnya">Lainnya</option>
+                    <label for="sub_kategori_id" class="block text-sm font-medium text-gray-700 mb-1">Sub Kategori</label>
+                    @php
+                        $subKategoris = \App\Models\SubKategori::with('kategori')->get();
+                    @endphp
+                    <select id="sub_kategori_id" name="sub_kategori_id" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500">
+                        <option value="">Pilih sub kategori</option>
+                        @foreach ($subKategoris as $sk)
+                            <option value="{{ $sk->id }}">{{ $sk->kategori->nama ?? '—' }} — {{ $sk->nama }}</option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -66,8 +66,14 @@
                     <textarea id="catatan" name="catatan" rows="3" class="block w-full rounded-lg border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 focus:border-green-500 focus:ring-green-500" placeholder="Contoh: Makan siang di warung..."></textarea>
                 </div>
 
+                <div id="alokasi-preview" class="hidden p-4 rounded-lg border mt-2">
+                    <p id="alokasi-text" class="text-sm text-gray-700">Alokasi: <span class="font-semibold">-</span></p>
+                    <p id="sisa-text" class="text-sm text-gray-700">Sisa setelah pengeluaran: <span class="font-semibold">-</span></p>
+                    <p id="hint-text" class="text-sm mt-2"></p>
+                </div>
+
                 <div class="pt-4">
-                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <button id="submit-btn" type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         Simpan
                     </button>
                 </div>
@@ -77,7 +83,6 @@
         </main>
     </div>
 
-    <!-- Script format angka -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const input = document.getElementById("jumlah");
@@ -89,6 +94,161 @@
                 } else {
                     this.value = "";
                 }
+                triggerPreview();
+            });
+
+            const subSelect = document.getElementById('sub_kategori_id');
+            const previewBox = document.getElementById('alokasi-preview');
+            const alokasiText = document.getElementById('alokasi-text');
+            const sisaText = document.getElementById('sisa-text');
+            const hintText = document.getElementById('hint-text');
+            const submitBtn = document.getElementById('submit-btn');
+            const form = document.querySelector('form');
+            const forceInput = document.getElementById('force-input');
+
+            window.needsConfirm = false;
+            window.forceConfirmed = false;
+
+            window.showConfirmModal = function(message) {
+                const modal = document.getElementById('confirm-modal');
+                const overlay = document.getElementById('modal-overlay');
+                const modalMsg = document.getElementById('modal-message');
+                if (modalMsg) modalMsg.textContent = message;
+                if (modal) modal.classList.remove('hidden');
+                if (overlay) overlay.classList.remove('hidden');
+            }
+
+            window.hideConfirmModal = function() {
+                const modal = document.getElementById('confirm-modal');
+                const overlay = document.getElementById('modal-overlay');
+                if (modal) modal.classList.add('hidden');
+                if (overlay) overlay.classList.add('hidden');
+            }
+
+            // Intercept submit to require confirmation when needed
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    if (window.needsConfirm && !window.forceConfirmed) {
+                        e.preventDefault();
+                        window.showConfirmModal('Sisa alokasi untuk kategori ini kurang dari 0. Apakah Anda yakin ingin melanjutkan?');
+                    }
+                });
+            }
+
+            subSelect.addEventListener('change', function() {
+                triggerPreview();
+            });
+
+            function getRawJumlah() {
+                const v = input.value || '';
+                return v.replace(/\./g, '').replace(/\s/g, '');
+            }
+
+            let previewTimeout = null;
+            function triggerPreview() {
+                if (previewTimeout) clearTimeout(previewTimeout);
+                previewTimeout = setTimeout(fetchPreview, 300);
+            }
+
+            function formatRupiah(amount) {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 2 }).format(amount);
+            }
+
+            function fetchPreview() {
+                const subId = subSelect.value;
+                const jumlah = getRawJumlah();
+                if (!subId || !jumlah) {
+                    previewBox.classList.add('hidden');
+                    submitBtn.disabled = false;
+                    hintText.textContent = '';
+                    return;
+                }
+
+                const params = new URLSearchParams({ sub_kategori_id: subId, jumlah: jumlah });
+
+                fetch(`{{ route('uang-keluar.preview') }}?` + params.toString(), { credentials: 'same-origin' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.error) {
+                            previewBox.classList.remove('hidden');
+                            alokasiText.querySelector('span').textContent = '-';
+                            sisaText.querySelector('span').textContent = '-';
+                            hintText.textContent = data.error;
+                            submitBtn.disabled = true;
+                            return;
+                        }
+
+                        previewBox.classList.remove('hidden');
+                        alokasiText.querySelector('span').textContent = formatRupiah(data.allocation);
+                        sisaText.querySelector('span').textContent = formatRupiah(data.remaining);
+                        if (typeof data.remaining !== 'undefined' && data.remaining < 0) {
+                            hintText.textContent = 'Saldo alokasi tidak mencukupi.';
+                            // require confirmation to proceed; leave submit enabled so user can click and confirm
+                            window.needsConfirm = true;
+                            window.forceConfirmed = false;
+                            if (forceInput) forceInput.value = '0';
+                            submitBtn.disabled = false;
+                        } else if (!data.ok) {
+                            hintText.textContent = 'Saldo alokasi tidak mencukupi.';
+                            window.needsConfirm = false;
+                            if (forceInput) forceInput.value = '0';
+                            submitBtn.disabled = true;
+                        } else {
+                            hintText.textContent = 'Pengeluaran dapat dilakukan. Sisa setelah pengeluaran akan terlihat di atas.';
+                            window.needsConfirm = false;
+                            window.forceConfirmed = false;
+                            if (forceInput) forceInput.value = '0';
+                            submitBtn.disabled = false;
+                        }
+                    })
+                    .catch(err => {
+                        previewBox.classList.remove('hidden');
+                        hintText.textContent = 'Gagal mengambil data alokasi.';
+                        submitBtn.disabled = false;
+                    });
+            }
+        });
+    </script>
+
+    <!-- Modal overlay -->
+    <div id="modal-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="hidden fixed inset-0 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
+            <div class="p-4 border-b">
+                <h3 class="text-lg font-semibold">Peringatan</h3>
+            </div>
+            <div class="p-4">
+                <p id="modal-message" class="text-sm text-gray-700">Sisa alokasi tidak mencukupi. Apakah Anda yakin ingin melanjutkan?</p>
+            </div>
+            <div class="p-4 border-t flex justify-end space-x-2">
+                <button id="modal-cancel" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">Batal</button>
+                <button id="modal-confirm" class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cancelBtn = document.getElementById('modal-cancel');
+            const confirmBtn = document.getElementById('modal-confirm');
+            const overlay = document.getElementById('modal-overlay');
+            const modal = document.getElementById('confirm-modal');
+            if (cancelBtn) cancelBtn.addEventListener('click', function() {
+                window.hideConfirmModal();
+            });
+            if (overlay) overlay.addEventListener('click', function() {
+                window.hideConfirmModal();
+            });
+            if (confirmBtn) confirmBtn.addEventListener('click', function() {
+                // set force flag and submit
+                const forceInputEl = document.getElementById('force-input');
+                if (forceInputEl) forceInputEl.value = '1';
+                window.forceConfirmed = true;
+                window.hideConfirmModal();
+                const frm = document.querySelector('form');
+                if (frm) frm.submit();
             });
         });
     </script>

@@ -25,7 +25,7 @@
 
             <ul class="space-y-2 flex-grow">
                 <li>
-                    <a href="{{ route('home') }}" class="flex items-center p-3 text-base font-semibold text-white bg-green-600 rounded-xl shadow-md">
+                    <a href="{{ route('home') }}" class="flex items-center p-3 text-base font-semibold rounded-xl {{ request()->routeIs('home') ? 'text-white bg-green-600 shadow-md' : 'text-gray-700 hover:bg-green-50' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                             <polyline points="9 22 9 12 15 12 15 22" />
@@ -35,7 +35,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('riwayat') }}" class="flex items-center p-3 text-base font-semibold text-gray-700 hover:bg-green-50 rounded-xl">
+                    <a href="{{ route('riwayat') }}" class="flex items-center p-3 text-base font-semibold rounded-xl {{ request()->routeIs('riwayat') ? 'text-white bg-green-600 shadow-md' : 'text-gray-700 hover:bg-green-50' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 12a9 9 0 1 0 9-9" />
                             <path d="M3 3v5h5" />
@@ -46,7 +46,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('profile') }}" class="flex items-center p-3 text-base font-semibold text-gray-700 hover:bg-green-50 rounded-xl">
+                    <a href="{{ route('profile') }}" class="flex items-center p-3 text-base font-semibold rounded-xl {{ request()->routeIs('profile') ? 'text-white bg-green-600 shadow-md' : 'text-gray-700 hover:bg-green-50' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                             <circle cx="12" cy="7" r="4" />
@@ -59,15 +59,15 @@
     </nav>
 
     {{-- CONTENT WRAPPER --}}
-    <main class="mx-auto p-4 sm:p-6 lg:p-8 lg:ml-64 pb-24 lg:pb-8">
+    <main class="mx-auto sm:p-6 lg:p-8 lg:ml-64 pb-24 lg:pb-8">
         @yield('content')
     </main>
 
     {{-- BOTTOM NAV (MOBILE) --}}
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-xl z-40">
-        <div class="flex justify-around items-center h-16">
+            <div class="flex justify-around items-center h-16">
 
-            <a href="{{ route('home') }}" class="flex flex-col items-center justify-center w-full text-green-600">
+            <a href="{{ route('home') }}" class="flex flex-col items-center justify-center w-full {{ request()->routeIs('home') ? 'text-green-600' : 'text-gray-500 hover:text-green-600' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                     <polyline points="9 22 9 12 15 12 15 22" />
@@ -75,7 +75,7 @@
                 <span class="text-xs font-semibold mt-1">Home</span>
             </a>
 
-            <a href="{{ route('riwayat') }}" class="flex flex-col items-center justify-center w-full text-gray-500 hover:text-green-600">
+            <a href="{{ route('riwayat') }}" class="flex flex-col items-center justify-center w-full {{ request()->routeIs('riwayat') ? 'text-green-600' : 'text-gray-500 hover:text-green-600' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 12a9 9 0 1 0 9-9" />
                     <path d="M3 3v5h5" />
@@ -84,7 +84,7 @@
                 <span class="text-xs font-semibold mt-1">Riwayat</span>
             </a>
 
-            <a href="{{ route('profile') }}" class="flex flex-col items-center justify-center w-full text-gray-500 hover:text-green-600">
+            <a href="{{ route('profile') }}" class="flex flex-col items-center justify-center w-full {{ request()->routeIs('profile') ? 'text-green-600' : 'text-gray-500 hover:text-green-600' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
@@ -94,7 +94,7 @@
 
         </div>
     </nav>
-
+    @stack('script')
 </body>
 
 </html>

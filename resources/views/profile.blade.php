@@ -1,32 +1,14 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Saya - Manajemen Keuangan</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="bg-gray-100">
-
-    <div class="max-w-lg mx-auto bg-white min-h-screen lg:min-h-0 lg:max-w-5xl lg:mt-12 lg:rounded-xl lg:shadow-xl lg:overflow-hidden">
-
+@extends('layouts.app')
+@section('content')
         <header class="bg-white sticky top-0 z-10 shadow-sm lg:shadow-none lg:border-b lg:border-gray-200">
             <div class="p-4 lg:p-6 flex items-center">
-                <a href="{{ url()->previous() }}" class="p-2 mr-2 rounded-full hover:bg-gray-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-800">
-                        <path d="M19 12H5"></path>
-                        <path d="M12 19l-7-7 7-7"></path>
-                    </svg>
-                </a>
-                <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Profil Saya</h1>
+                <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Pengaturan</h1>
             </div>
         </header>
 
-        <main class="p-4 sm:p-6 lg:p-8 lg:grid lg:grid-cols-3 lg:gap-8">
+        <main class="p-4 sm:p-6 lg:p-8 lg:grid lg:grid-cols-1 lg:gap-8">
 
-            <div class="flex flex-col items-center text-center py-8 lg:col-span-1 lg:items-start lg:text-left lg:py-0">
+            <div class="flex flex-col items-center text-center py-8 lg:hidden lg:py-0">
                 <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden mb-4">
                     <img src="/user.png" alt="Foto Profil" class="w-full h-full object-cover">
                 </div>
@@ -37,7 +19,7 @@
             <div class="lg:col-span-2">
                 <div class="mt-6 lg:mt-0 space-y-2">
                     <h3 class="px-4 text-sm font-semibold text-gray-500 mb-2">PENGATURAN AKUN</h3>
-                    <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                    <a href="{{ route('profile.edit') }}" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-green-600 mr-4">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -47,7 +29,7 @@
                             <path d="m9 18 6-6-6-6"></path>
                         </svg>
                     </a>
-                    <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                    <a href="{{ route('profile.security') }}" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-green-600 mr-4">
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -61,7 +43,7 @@
 
                 <div class="mt-8 space-y-2">
                     <h3 class="px-4 text-sm font-semibold text-gray-500 mb-2">PENGATURAN APLIKASI</h3>
-                    <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                    <!-- <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 13h2v5H7zm4-3h2v8h-2zm4-4h2v12h-2z" />
                         </svg>
@@ -69,7 +51,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
                         </svg>
-                    </a>
+                    </a> -->
                     <a href="{{ route('kategori') }}" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20 12V7a2 2 0 0 0-2-2h-5l-9 9a2 2 0 0 0 0 2.83l5.17 5.17a2 2 0 0 0 2.83 0l9-9z" />
@@ -83,24 +65,10 @@
                 </div>
 
 
-                <div class="mt-8 space-y-2">
-                    <h3 class="px-4 text-sm font-semibold text-gray-500 mb-2">BANTUAN</h3>
-                    <a href="#" class="flex items-center p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-green-600 mr-4">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                        <span class="font-semibold text-gray-800 flex-grow">Pusat Bantuan</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-400">
-                            <path d="m9 18 6-6-6-6"></path>
-                        </svg>
-                    </a>
-                </div>
-
+                
                 <div class="mt-12">
                     <button id="logoutBtn" type="button" class="w-full text-left flex items-center p-4 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-4">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                             <polyline points="16 17 21 12 16 7"></polyline>
                             <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -110,7 +78,6 @@
                 </div>
             </div>
         </main>
-    </div>
 
     <div id="logoutModal" class="fixed inset-0 z-50 flex items-center justify-center bg-white/20 backdrop-blur-sm hidden">
         <div class="bg-white max-w-sm w-full rounded-lg shadow-xl p-6 mx-4">
@@ -166,6 +133,4 @@
             }
         })
     </script>
-</body>
-
-</html>
+@endsection
